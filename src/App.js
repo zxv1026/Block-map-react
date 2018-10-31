@@ -3,6 +3,7 @@ import './App.css';
 import { Layout, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import List from './List'
+import MapContainer from './MapContainer'
 const { Header, Content, Sider } = Layout;
 
 class App extends Component {
@@ -52,11 +53,9 @@ class App extends Component {
                     </span>
                     <span style={{color:'#fff', paddingLeft:'2%', fontSize:'1.4em'}}>Block map</span>
                 </Header>
-                <Content style={{ margin: '0 16px' }}>
-                    <div style={{ padding: 24, background: '#fff', minHeight: 780 }}>
-
-                    </div>
-                </Content>
+                
+                <MapContainer/>
+                
             </Layout>
         </Layout>
         )
