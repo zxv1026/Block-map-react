@@ -93,7 +93,9 @@ class App extends Component {
                     <span style={{color:'#fff', paddingLeft:'2%', fontSize:'1.4em'}}>Block map</span>
                 </Header>
                 
-                <MapContainer/>
+                <MapContainer
+                    places={showingContacts}
+                />
                 
             </Layout>
         </Layout>
