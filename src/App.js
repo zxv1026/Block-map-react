@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
+import escapeRegExp from 'escape-string-regexp';
+import sortBy from 'sort-by';
 import { Layout, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import List from './List'
@@ -22,6 +24,7 @@ class App extends Component {
             {key:'place8',title:'京杭大运河广场',location:{lat:30.317547,lng:120.142420}},
             {key:'place9',title:'杭州半山国家森林公园',location:{lat:30.362593,lng:120.187658}}
         ],
+        query: '',
     }
 
     toggle = () => {
@@ -30,15 +33,51 @@ class App extends Component {
         })
     }
 
+    updateQuery(query) {
+        this.setState({ query: query.trim() })
+    }
+
+    clearQuery = (query) => {
+        this.setState({ query: '' })
+    }
+
     render() {
+        const { place, query } = this.state
+
+        let showingContacts
+        if (query) {
+            const match = new RegExp(escapeRegExp(query), 'i')
+            showingContacts = place.filter((place) => match.test(place.title))
+        } else {
+            showingContacts = place
+        }
+
+        showingContacts.sort(sortBy('title'))
+
         return (
         <Layout>
             <Sider
                 trigger={null}
                 collapsed={this.state.collapsed}
             >
+                <div id="searchBox">
+                    <input
+                        id="address"
+                        type="text" 
+                        value={query}
+                        placeholder="Station location"
+                        onChange={(event)=>this.updateQuery(event.target.value)}/>
+                </div>
+
+                {showingContacts.length !== place.length && (
+                    <div className='showing-contacts'>
+                        <span>Now showing {showingContacts.length} of {place.length} total</span>
+                        <button onClick={this.clearQuery}>Show all</button>
+                    </div>
+                )}
+
                 <List 
-                    places={this.state.place}
+                    places={showingContacts}
                 />
             </Sider>
             <Layout>
