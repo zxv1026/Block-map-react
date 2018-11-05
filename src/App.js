@@ -12,7 +12,7 @@ class App extends Component {
     state = {
         collapsed: false,
         mode: 'inline',
-        place:[
+        places:[
             {key:'place0',title:'杭州市人民政府',location:{lat:30.2743848,lng:120.1553389}},
             {key:'place1',title:'西湖风景区',location:{lat:30.2248842,lng:120.0957525}},
             {key:'place2',title:'西溪湿地公园',location:{lat:30.268996,lng:120.0670349}},
@@ -42,14 +42,14 @@ class App extends Component {
     }
 
     render() {
-        const { place, query } = this.state
+        const { places, query } = this.state
 
         let showingContacts
         if (query) {
             const match = new RegExp(escapeRegExp(query), 'i')
-            showingContacts = place.filter((place) => match.test(place.title))
+            showingContacts = places.filter((place) => match.test(place.title))
         } else {
-            showingContacts = place
+            showingContacts = places
         }
 
         showingContacts.sort(sortBy('title'))
@@ -69,9 +69,9 @@ class App extends Component {
                         onChange={(event)=>this.updateQuery(event.target.value)}/>
                 </div>
 
-                {showingContacts.length !== place.length && (
+                {showingContacts.length !== places.length && (
                     <div className='showing-contacts'>
-                        <span>Now showing {showingContacts.length} of {place.length} total</span>
+                        <span>Now showing {showingContacts.length} of {places.length} total</span>
                         <button onClick={this.clearQuery}>Show all</button>
                     </div>
                 )}
