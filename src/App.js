@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import escapeRegExp from 'escape-string-regexp';
-import sortBy from 'sort-by';
-import List from './List'
 import MapContainer from './MapContainer'
 import locations from "./Locations.js";
 import Nav from "./Nav";
