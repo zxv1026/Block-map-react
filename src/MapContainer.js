@@ -8,6 +8,28 @@ const style = {
     position: "absolute"
 };
 
+class LoadingContainer extends Component {
+    state = {
+        content: '加载中...'
+    }
+    componentDidMount() {
+        this.timer = setTimeout(() => {
+            this.setState({
+                content: '加载超时，请检查网络！'
+            });
+        }, 1000);
+    }
+    componentWillUnmount() {
+        // 清除计时器
+        clearTimeout(this.timer);
+    }
+    render() {
+        return (
+            this.state.content
+        )
+    }
+}
+
 //引入FourSquare API
 var foursquare = require("react-foursquare")({
     clientID: "AIRZBMKYSGK01J2WDA21RRZPY11IAV4HNUPCKLSNXOPVXJYE",
@@ -22,8 +44,22 @@ export class Container extends Component {
         selectLoc: null,
         item1: {},
         item2: {},
-        errors: ''
+        errors: '',
+        content: '加载中...'
     }
+
+    componentDidMount() {
+        this.timer = setTimeout(() => {
+            this.setState({
+                content: '加载超时，请检查网络！'
+            });
+        }, 1000);
+    }
+    componentWillUnmount() {
+        // 清除计时器
+        clearTimeout(this.timer);
+    }
+
     componentWillReceiveProps(nextProps) {
         console.log(this.props.selectLoc);
         console.log(nextProps);
@@ -117,11 +153,8 @@ export class Container extends Component {
                 lng: 120.1553389
             };
         }
-		if(!this.props.loaded){
-			return <div className="loading">Loading...</div>
-		}
 
-		return(
+        return(
             <Map
                 style={style}
                 google={this.props.google}
@@ -130,18 +163,18 @@ export class Container extends Component {
                 bounds={bounds}
                 onReady={this.mapReady}>
                 {locations.map((loc) =>( 
-	            	<Marker	
-	            		key={loc.key}
-	            		title={loc.title}
+                    <Marker	
+                        key={loc.key}
+                        title={loc.title}
                         position={loc.location}
                         ref={loc.title}
- 	            		onClick={this.onMarkerClick}
-	            	/>
+                        onClick={this.onMarkerClick}
+                    />
                 ))}
                 <InfoWindow
- 	            	visible={this.state.showingInfo}
- 	            	marker={this.state.currentMarker}>
- 	            	<div>
+                    visible={this.state.showingInfo}
+                    marker={this.state.currentMarker}>
+                    <div>
                         <h2>{this.state.selectLoc ? this.state.selectLoc.title : ""}</h2>
                         <div>Items:</div>
                         {this.state.item1 ? <p>{this.state.item1.name}</p> : "None"}
@@ -149,12 +182,13 @@ export class Container extends Component {
                         {this.state.errors ? <p>{this.state.errors}</p> : ""}
                         <p>(These data from FourSquare.)</p>
                     </div>
- 	            </InfoWindow>
+                </InfoWindow>
             </Map>
-		)
+        )
 	} 
 }
 
 export default GoogleApiWrapper({
-	apiKey:'AIzaSyDUpWe96YFHRBHwOPik8IltqN3KruNfvTA'
+    apiKey:'AIzaSyDUpWe96YFHRBHwOPik8IltqN3KruNfvTA',
+    LoadingContainer: LoadingContainer
 })(Container)
